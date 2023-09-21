@@ -6,6 +6,7 @@ pipeline {
         bat '''
           npm i -D @playwright/test
         '''
+        slackSend "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
       }
     }
     stage('Install Playwright and browsers') {
@@ -24,7 +25,7 @@ pipeline {
     }
     post {
             started {
-                slackSend "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                
             }
             success {
                 slackSend "Build deployed successfully - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
