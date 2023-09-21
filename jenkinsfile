@@ -1,11 +1,20 @@
 pipeline {
-   agent { docker { image 'mcr.microsoft.com/playwright:v1.38.0-jammy' } }
+   agent { any { image 'mcr.microsoft.com/playwright:v1.38.0-jammy' } }
    stages {
-      stage('e2e-tests') {
-         steps {
-            bat  'ci'
-            bat  'npx playwright test'
-         }
+      stage('install playwright') {
+      steps {
+        bat '''
+          npm i -D @playwright/test
+          npx playwright install
+        '''
       }
+    }
+    stage('test') {
+      steps {
+        bat '''
+          npx playwright test 
+        '''
+      }
+    }
    }
 }
