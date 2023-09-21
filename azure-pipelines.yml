@@ -1,0 +1,59 @@
+name: Playwright Tests
+trigger:
+  - main
+jobs:
+  - job: test
+    timeoutInMinutes: 60
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '16.x'
+        displayName: 'Install Node.js'
+
+      - script: |
+          npm ci
+        displayName: 'Install dependencies'
+
+      - script: |
+          npx playwright install --with-deps
+        displayName: 'Install Playwright Browsers'
+
+    #  - task: DownloadSecureFile@1
+    #    inputs:
+    #      secureFile: '.env'
+    #  - task: CopyFiles@2
+    #    inputs:
+    #      SourceFolder: '$(Agent.TempDirectory)'
+    #      Contents: '.env'
+    #      TargetFolder: '$(Build.SourcesDirectory)/Playwright-tests'
+    #      OverWrite: true
+    #      displayName: 'Copy Library files to Build'
+
+      - script: |
+          npx playwright test 
+        displayName: 'Run all Playwright tests'
+        continueOnError: 'true'
+
+    #  - task: PublishTestResults@2
+    #    displayName: 'Publish test results'
+    #    inputs:
+    #      searchFolder: '$(System.DefaultWorkingDirectory)/Playwright-tests/test-results'
+    #      testResultsFormat: 'JUnit'
+    #      testResultsFiles: 'e2e-junit-results.xml'
+    #      mergeTestResults: true
+    #      failTaskOnFailedTests: true
+    #      testRunTitle: 'Partner Portal Pwaywright Tests'
+    #      condition: succeededOrFailed()
+
+    #    # Delete files v1
+    #  # Delete folders, or files matching a pattern.
+    #  - task: DeleteFiles@1
+    #    inputs:
+    #      #SourceFolder: '$(Build.SourcesDirectory)/Playwright' 
+    #      Contents: '.env'
+    #      #RemoveSourceFolder: false # boolean. Remove SourceFolder. Default: false.
+    #      #Advanced
+    #      RemoveDotFiles: true # boolean. Remove files starting with a dot. Default: false.
