@@ -5,6 +5,12 @@ pipeline {
       steps {
         bat '''
           npm i -D @playwright/test
+        '''
+      }
+    }
+    stage('install playwright pt 2') {
+      steps {
+        bat '''
           npx playwright install
         '''
       }
