@@ -6,8 +6,6 @@ pipeline {
             bat '''
             npm i -D @playwright/test
             '''
-            echo "${getBuildUser()}"
-            //echo "Running ${env.JOB_NAME} ${env.BUILD_URL} ${env.BUILD_NUMBER} ${env.STAGE_NAME} ${responder} ${env.GIT_BRANCH}"
             script {
               statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} started by ${getBuildUser()}"
               slackSend color: '#0000ff', message: statusComment
@@ -30,7 +28,7 @@ pipeline {
         '''
       }
     }
-    stage('Publish Playwright report') {
+/*    stage('Publish Playwright report') {
       steps {
           publishHTML (target: [
               allowMissing: false,
@@ -41,7 +39,7 @@ pipeline {
               reportName: "Playwright Report"
     ])
       }
-    }
+    }*/
   }
 
   post {
