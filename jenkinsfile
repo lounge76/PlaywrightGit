@@ -3,9 +3,13 @@ pipeline {
    stages {
       stage('Add dependency') {
       steps {
-        bat '''
-          npm i -D @playwright/test
-        '''
+            bat '''
+            npm i -D @playwright/test
+            '''
+            script {
+              //statusComment = "[${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> ${env.STAGE_NAME} stage was approved by ${responder} for ${env.GIT_BRANCH}"
+              slackSend color: '#0000ff', message: "statusComment"
+            }
       }
       
     }
@@ -14,6 +18,7 @@ pipeline {
         bat '''
           npx playwright install
         '''
+
       }
     }
     stage('Run Playwright tests') {
