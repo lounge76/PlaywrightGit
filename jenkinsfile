@@ -30,11 +30,16 @@ pipeline {
         '''
       }
     }
-    stage('Show Playwright report') {
+    stage('Generate Playwright report') {
       steps {
-        bat '''
-          npx playwright show-report 
-        '''
+          publishHTML (target: [
+              allowMissing: false,
+              alwaysLinkToLastBuild: false,
+              keepAll: true,
+              reportDir: 'coverage',
+              reportFiles: 'index.html',
+              reportName: "Playwright Report"
+    ])
       }
     }
   }
