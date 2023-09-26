@@ -39,12 +39,7 @@ pipeline {
                 slackSend color: 'good', message: statusComment
             }
         }
-        failure {
-            script {
-                statusComment = getTestResultsMessage()
-                slackSend color: 'danger', message: statusComment
-            }
-        }
+        
         aborted {
             script {
                 statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} was aborted."
