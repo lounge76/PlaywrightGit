@@ -10,7 +10,7 @@ pipeline {
             script {
               BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription + " / " + currentBuild.getBuildCauses()[0].userId
               echo "BUILD_TRIGGER_BY: ${BUILD_TRIGGER_BY}"
-              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} started by ${BUILD_TRIGGER_BY}"
+              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} ${BUILD_TRIGGER_BY}"
               slackSend color: '#0000ff', message: statusComment            
             }
       }
