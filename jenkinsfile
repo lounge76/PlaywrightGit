@@ -24,6 +24,9 @@ pipeline {
     }
   }
  post {
+    started {
+      slackSend color: "good", message: ${env.JOB_NAME} ${env.BUILD_NUMBER} "Playwright tests started by Jenkins."
+    }
     success {
       slackSend color: "good", message: ${env.JOB_NAME} ${env.BUILD_NUMBER} "Deployment of all test succeesful"
     }
