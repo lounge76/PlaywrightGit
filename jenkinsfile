@@ -9,7 +9,7 @@ pipeline {
             echo "${getBuildUser()}"
             //echo "Running ${env.JOB_NAME} ${env.BUILD_URL} ${env.BUILD_NUMBER} ${env.STAGE_NAME} ${responder} ${env.GIT_BRANCH}"
             script {
-              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} started."
+              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} started by ${getBuildUser()}"
               slackSend color: '#0000ff', message: statusComment
             }
       }
@@ -39,15 +39,31 @@ pipeline {
                 slackSend color: 'good', message: statusComment
             }
         }
-        
+        failure {
+            script {
+                statusComment = getTestResultsMessage()
+                slackSend color: 'danger', message: statusComment
+            }
+        }
         aborted {
             script {
-                statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} was aborted."
+                statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} was aborted by ${getBuildUser()}."
                 slackSend message: statusComment
             }
         }
     }
 
+}
+String getTestResultsMessage() {
+    AbstractTestResultAction testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
+    if (testResultAction != null) {
+        def total = testResultAction.totalCount
+        def failed = testResultAction.failCount
+        def skipped = testResultAction.skipCount
+        return "${env.JOB_NAME} - #${env.BUILD_NUMBER}> had test failures for ${env.GIT_BRANCH}.\n  Total: ${total}, Failed: ${failed}, Skipped: ${skipped}"
+    } else {
+        return "${env.JOB_NAME} - #${env.BUILD_NUMBER}> failed for ${env.GIT_BRANCH}"
+    }
 }
 
 String getBuildUser() {
