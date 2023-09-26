@@ -9,7 +9,7 @@ pipeline {
             //echo "Running ${env.JOB_NAME} ${env.BUILD_URL} ${env.BUILD_NUMBER} ${env.STAGE_NAME}${env.GIT_BRANCH}"
             //echo "Running ${env.JOB_NAME} ${env.BUILD_URL} ${env.BUILD_NUMBER} ${env.STAGE_NAME} ${responder} ${env.GIT_BRANCH}"
             script {
-              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} started by ${getBuildUser()}."
+              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} started."
               slackSend color: '#0000ff', message: statusComment
             }
       }
@@ -41,10 +41,10 @@ pipeline {
         }
 
 
-        
+
         aborted {
             script {
-                statusComment = "${env.JOB_NAME} |#${env.BUILD_NUMBER} was aborted by ${getBuildUser()}"
+                statusComment = "${env.JOB_NAME} |#${env.BUILD_NUMBER} was aborted."
                 slackSend message: statusComment
             }
         }
