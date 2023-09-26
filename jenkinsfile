@@ -9,8 +9,8 @@ pipeline {
             echo "Running ${env.JOB_NAME} ${env.BUILD_URL} ${env.BUILD_NUMBER} ${env.STAGE_NAME}${env.GIT_BRANCH}"
             //echo "Running ${env.JOB_NAME} ${env.BUILD_URL} ${env.BUILD_NUMBER} ${env.STAGE_NAME} ${responder} ${env.GIT_BRANCH}"
             script {
-              //statusComment = "[${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> ${env.STAGE_NAME} stage was approved by ${responder} for ${env.GIT_BRANCH}"
-              slackSend color: '#0000ff', message: "${env.JOB_NAME} #${env.BUILD_NUMBER} started. ${env.GIT_BRANCH}"
+              statusComment = "${env.JOB_NAME} #${env.BUILD_NUMBER} started."
+              slackSend color: '#0000ff', message: statusComment
             }
       }
       
