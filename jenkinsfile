@@ -30,6 +30,13 @@ pipeline {
         '''
       }
     }
+    stage('Show Playwright report') {
+      steps {
+        bat '''
+          npx playwright show-report 
+        '''
+      }
+    }
   }
 
   post {
