@@ -48,7 +48,7 @@ pipeline {
         aborted {
             script {
                 statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} was aborted by ${getBuildUser()}."
-                slackSend message: statusComment
+                slackSend color: 'danger', message: statusComment
             }
         }
     }
