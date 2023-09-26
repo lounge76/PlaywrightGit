@@ -1,0 +1,41 @@
+pipeline {
+   agent { any { image 'mcr.microsoft.com/playwright:v1.38.0-jammy' } }
+   stages {
+      stage('Add dependency') {
+      steps {
+        bat '''
+          npm i -D @playwright/test
+        '''
+        script {
+          statusComment = "[${env.JOB_NAME}] <${env.BUILD_URL}|#${env.BUILD_NUMBER}> ${env.STAGE_NAME} stage was approved by ${responder} for ${env.GIT_BRANCH}"
+          slackSend color: '#0000ff', message: statusComment
+        }
+      }
+      
+    }
+    stage('Install Playwright and browsers') {
+      steps {
+        bat '''
+          npx playwright install
+        '''
+      }
+    }
+    stage('Run Playwright tests') {
+      steps {
+        bat '''
+          npx playwright test 
+        '''
+      }
+    }
+  }
+ /*
+ post {
+    success {
+      slackSend color: "good", message: ${env.JOB_NAME} ${env.BUILD_NUMBER} "Deployment of all test succeesful"
+    }
+    failure {
+      slackSend color: "danger", message: ${env.JOB_NAME} ${env.BUILD_NUMBER} "Deployment of one or more tests failed!"
+    }
+  }
+  */
+}
