@@ -28,6 +28,7 @@ pipeline {
       }
     }
   }
+ /*
  post {
     success {
       slackSend color: "good", message: ${env.JOB_NAME} ${env.BUILD_NUMBER} "Deployment of all test succeesful"
@@ -36,4 +37,5 @@ pipeline {
       slackSend color: "danger", message: ${env.JOB_NAME} ${env.BUILD_NUMBER} "Deployment of one or more tests failed!"
     }
   }
+  */
 }
