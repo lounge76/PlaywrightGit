@@ -22,6 +22,7 @@ pipeline {
     stage('Run Playwright tests') {
       steps {
         bat '''
+          npx playwright test --list
           npx playwright test 
         '''
       }
