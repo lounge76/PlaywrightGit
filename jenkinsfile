@@ -1,7 +1,5 @@
 pipeline {
    agent { any { image 'mcr.microsoft.com/playwright:v1.38.0-jammy' } }
-
-    tools {nodejs "NodeJS"}
    
    stages {
       stage('Install Playwright') {
