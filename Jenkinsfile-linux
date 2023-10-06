@@ -4,11 +4,12 @@ pipeline {
     tools {nodejs "nodejs"}
    
    stages {
-      stage('Install Playwright') {
+      stage('Install Playwright deps') {
       steps {
             sh '''
               npm i -D @playwright/test
-              npx playwright install-deps
+              npx playwright install
+              npx playwright install-deps   
             '''
             
             //script {
@@ -20,10 +21,19 @@ pipeline {
       }      
     }
 
+          stage('Install Playwright') {
+      steps {
+            sh '''
+              npx playwright install
+            '''
+      }      
+    }
+
 
     stage('Run Playwright tests') {
       steps {
         sh '''
+        
           npx playwright test --list
           npx playwright test 
         '''
