@@ -11,12 +11,12 @@ pipeline {
               npx playwright install
             '''
             
-            script {
-              BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription
-              //BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription + " / " + currentBuild.getBuildCauses()[0].userId
-              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} ${BUILD_TRIGGER_BY}"
-              slackSend color: '#0000ff', message: statusComment            
-            }
+            //script {
+            //  BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription
+            //  //BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription + " / " + currentBuild.getBuildCauses()[0].userId
+            //  statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} ${BUILD_TRIGGER_BY}"
+            //  slackSend color: '#0000ff', message: statusComment            
+            //}
       }      
     }
 
