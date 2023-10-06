@@ -1,10 +1,11 @@
 pipeline {
    agent { any { image 'mcr.microsoft.com/playwright:v1.38.0-jammy' } }
+
    
    stages {
       stage('Install Playwright') {
       steps {
-            sh '''
+            bat '''
               npm i -D @playwright/test
               npx playwright install
             '''
@@ -21,7 +22,7 @@ pipeline {
 
     stage('Run Playwright tests') {
       steps {
-        sh '''
+        bat '''
           npx playwright test --list
           npx playwright test 
         '''

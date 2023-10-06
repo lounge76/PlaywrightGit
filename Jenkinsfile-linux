@@ -1,0 +1,71 @@
+pipeline {
+   agent { any { image 'mcr.microsoft.com/playwright:v1.38.0-jammy' } }
+
+    tools {nodejs "Nodejs"}
+   
+   stages {
+      stage('Install Playwright') {
+      steps {
+            sh '''
+              npm i -D @playwright/test
+              npx playwright install
+            '''
+            
+            script {
+              BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription
+              //BUILD_TRIGGER_BY = currentBuild.getBuildCauses()[0].shortDescription + " / " + currentBuild.getBuildCauses()[0].userId
+              statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} ${BUILD_TRIGGER_BY}"
+              slackSend color: '#0000ff', message: statusComment            
+            }
+      }      
+    }
+
+
+    stage('Run Playwright tests') {
+      steps {
+        sh '''
+          npx playwright test --list
+          npx playwright test 
+        '''
+      }
+    }
+/*    stage('Publish Playwright report') {
+      steps {
+          publishHTML (target: [
+              allowMissing: false,
+              alwaysLinkToLastBuild: false,
+              keepAll: true,
+              reportDir: '/coverage',
+              reportFiles: 'index.html',
+              reportName: "Playwright Report"
+    ])
+      }
+    }*/
+  }
+
+  post {
+        success {
+            script {
+                statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} completed succesfully! :tada:"
+                slackSend color: 'good', message: statusComment
+              }
+              {
+                archiveArtifacts(artifacts: 'homepage-*.png', followSymlinks: false)
+                sh 'rm -rf *.png'
+              }
+        }
+        failure {
+            script {
+                statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} has failed tests."
+                slackSend color: 'danger', message: statusComment
+            }
+        }
+        aborted {
+            script {
+                statusComment = "${env.JOB_NAME} - #${env.BUILD_NUMBER} was aborted by ${BUILD_TRIGGER_BY}."
+                slackSend color: 'danger', message: statusComment
+            }
+        }
+    }
+
+}
